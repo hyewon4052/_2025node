@@ -13,8 +13,6 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME
 })
 
-travelList = ['뉴욕','서울','파리','도쿄']
-
 app.set('view engine','ejs');
 
 // __dirname : 현재 파일이 속한 절대 경로
@@ -29,13 +27,23 @@ db.connect(err=> {
     console.log("mysql에 연결되었습니다.")
 })
 
+app.get('/travel',(req,res)=>{
+    const query = 'SELECT id, name FROM travelList';
+    db.query(query, (err, results)=>{
+        if(err) {
+            console.error('데이터베이스 쿼리 실패 : ', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        const travelList = results;
+        res.render('travel',{travelList})
+    })
+})
+
 app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.get('/travel', (req, res) => {
-    res.render('travel',{travelList});
-});
 
 app.listen(3001, () => {
     console.log('서버가 http://localhost:3001 에서 실행 중입니다.');
