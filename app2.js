@@ -40,6 +40,24 @@ app.get('/travel',(req,res)=>{
     })
 })
 
+app.get('/travel/:id',(req,res)=> {
+    const travelID = req.params.id;
+    const query = 'SELECT * FROM travelList WHERE id = ?';
+    db.query(query, [travelID], (err, results)=> {
+        if (err) {
+            console.error('DB 쿼리 실패',err);
+            res.status(500).send('내부 서버 에러');
+            return;
+        }
+        if(results.length === 0) {
+            res.status(404).send('여행지를 찾을 수 없습니다.');
+            return;
+        }
+        const travel = results[0];
+        res.render('travelDetail',{travel});
+    })
+})
+
 app.get('/', (req, res) => {
     res.render('home');
 });
