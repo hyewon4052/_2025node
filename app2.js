@@ -62,8 +62,12 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
+// use : 모든 method에 대해, 경로가 없으면? : 모든 경로에 대해
+app.use((req,res)=>{
+    res.status(404).send('사공사 낫파운드');
+})
 
 app.listen(3001, () => {
     console.log('서버가 http://localhost:3001 에서 실행 중입니다.');
-  });
+});
   
