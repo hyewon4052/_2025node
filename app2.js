@@ -13,6 +13,9 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME
 })
 
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 app.set('view engine','ejs');
 
 // __dirname : 현재 파일이 속한 절대 경로
@@ -42,8 +45,8 @@ app.get('/travel',(req,res)=>{
 
 app.get('/travel/:id',(req,res)=> {
     const travelID = req.params.id;
-    const query = 'SELECT * FROM travelList WHERE id = ?';
-    db.query(query, [travelID], (err, results)=> {
+    const _query = 'SELECT * FROM travelList WHERE id = ?';
+    db.query(_query, [travelID], (err, results)=> {
         if (err) {
             console.error('DB 쿼리 실패',err);
             res.status(500).send('내부 서버 에러');
@@ -61,6 +64,20 @@ app.get('/travel/:id',(req,res)=> {
 app.get('/', (req, res) => {
     res.render('home');
 });
+
+
+app.post('/travel',(req,res)=>{
+    const {name} = req.body;
+    const _query = 'INSERT INTO travelList (name) VALUES (?)';
+    db.query(_query,[name],(err,results)=>{
+        if(err) {
+            console.error('데이터베이스 쿼리 실패 : ', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        res.redirect('/travel');
+    })
+})
 
 // use : 모든 method에 대해, 경로가 없으면? : 모든 경로에 대해
 app.use((req,res)=>{
