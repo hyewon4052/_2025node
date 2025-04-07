@@ -1,5 +1,6 @@
 const express = require('express');
 
+const port = 3001;
 const app = express();
 
 app.use(express.json());
@@ -10,6 +11,6 @@ app.post('/submit', (req, res)=> {
   res.send(`Name : ${name}, Year: ${year}`); 
 });
 
-app.listen(3001,()=>{
+app.listen(port,()=>{
   console.log('서버가 http://localhost:3001 에서 실행중입니다.');
 })

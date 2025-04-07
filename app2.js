@@ -4,7 +4,10 @@ const app = express();
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 
+const port = 3001;
+
 dotenv.config();
+
 
 const db = mysql.createConnection({
     host : process.env.DB_HOST,
@@ -106,7 +109,8 @@ app.use((req,res)=>{
     res.status(404).send('사공사 낫파운드');
 })
 
-app.listen(3001, () => {
-    console.log('서버가 http://localhost:3001 에서 실행 중입니다.');
+app.listen(port, () => {
+    console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
+    
 });
   
